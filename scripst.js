@@ -7,12 +7,16 @@ let residuos = [
   { type: "Aprovechables", x: 50, y: 100, width: 75, height: 75 },
   { type: "No Aprovechables", x: 150, y: 100, width: 75, height: 75 },
   { type: "Organicos", x: 250, y: 100, width: 75, height: 75 },
+  { type: "CascaraPlatano", x: 350, y: 100, width: 75, height: 75 },
+  { type: "CascarasHuevo", x: 450, y: 100, width: 75, height: 75 },
+  { type: "Papel", x: 550, y: 100, width: 75, height: 75 },
+  { type: "Bolsa", x: 650, y: 100, width: 75, height: 75 },
 ];
 
 const canecas = [
-  { type: "Blanca", x: 500, y: 100, width: 100, height: 100, color:"gray"},
-  { type: "Verde", x: 500, y: 250, width: 100, height: 100, color:"green"},
-  { type: "Negra", x: 500, y: 400, width: 100, height: 100, color:"black"},
+  { type: "Blanca", x: 100, y: 300, width: 100, height: 100, color: "gray" },
+  { type: "Verde", x: 250, y: 300, width: 100, height: 100, color: "green" },
+  { type: "Negra", x: 400, y: 300, width: 100, height: 100, color: "black" },
 ];
 
 const images = {};
@@ -38,10 +42,10 @@ const loadImages = async () => {
       loadImage("resources/images/aprovechables.jpg", "Aprovechables"),
       loadImage("resources/images/no_aprovechable.png", "No Aprovechables"),
       loadImage("resources/images/Residuos-organicos.png", "Organicos"),
-      loadImage("resources/images/cascaraPlatano.webp", "cascaraPlatano"),
-      loadImage("resources/images/cascaras-huevo.png", "cascacarHuevo"),
-      loadImage("resources/images/papel.webp", "papel"),
-      loadImage("resources/images/bolsa.png", "bolsa"),
+      loadImage("resources/images/cascaraPlatano.webp", "CascaraPlatano"),
+      loadImage("resources/images/cascaras-huevo.png", "CascarasHuevo"),
+      loadImage("resources/images/papel.webp", "Papel"),
+      loadImage("resources/images/bolsa.png", "Bolsa"),
       loadImage("resources/images/caneca-blanca.jpg", "Blanca"),
       loadImage("resources/images/caneca-negra.webp", "Negra"),
       loadImage("resources/images/caneca-verde.jpg", "Verde"),
@@ -55,27 +59,24 @@ const loadImages = async () => {
 const draw = () => {
   ctx.clearRect(0, 0, canva.width, canva.height);
 
-  residuos.forEach((residuo) => {
-    if (images[residuo.type]) {
-      ctx.drawImage(images[residuo.type], residuo.x, residuo.y, residuo.width, residuo.height);
-    }
-  });
-
+  // Dibuja las canecas primero para que queden en el fondo
   canecas.forEach((caneca) => {
     if (images[caneca.type]) {
       ctx.drawImage(images[caneca.type], caneca.x, caneca.y, caneca.width, caneca.height);
       ctx.strokeRect(caneca.x, caneca.y, caneca.width, caneca.height);
-    ctx.font = "16px Arial";
-    ctx.fillStyle = `${caneca.color}`; 
+      ctx.font = "16px Arial";
+      ctx.fillStyle = caneca.color;
+      const textX = caneca.x + caneca.width / 2;
+      const textY = caneca.y + caneca.height + 20;
+      ctx.textAlign = "center";
+      ctx.fillText(caneca.type, textX, textY);
+    }
+  });
 
-   
-    const textX = caneca.x + caneca.width / 2; 
-    const textY = caneca.y + caneca.height + 20; 
-
-    
-    ctx.textAlign = "center";
-    ctx.fillText(caneca.type, textX, textY);
-
+  // Luego dibuja los residuos sobre las canecas
+  residuos.forEach((residuo) => {
+    if (images[residuo.type]) {
+      ctx.drawImage(images[residuo.type], residuo.x, residuo.y, residuo.width, residuo.height);
     }
   });
 
@@ -91,7 +92,6 @@ const draw = () => {
     }
   }
 
-
   ctx.font = "20px comic";
   ctx.textAlign = "left";
   ctx.fillStyle = "green";
@@ -103,11 +103,11 @@ const draw = () => {
     ctx.font = "30px Arial";
     ctx.fillStyle = "blue";
     ctx.textAlign = "center";
-    alert("¡Felicidades! Has terminado de seleccionar todos los residuos.")
+    alert("¡Felicidades! Has terminado de seleccionar todos los residuos.");
     alert(`
       Aciertos: ${correctCount}
-      Errores: ${incorrectCount} `)
-    window.location.reload()
+      Errores: ${incorrectCount}`);
+    window.location.reload();
   }
 };
 
@@ -159,9 +159,9 @@ canva.addEventListener("mouseup", (e) => {
           mouseY
         )
       ) {
-        if (selecResiduo.type === getResiduoTypeForCaneca(caneca.type)) {
+        if (getResiduoTypeForCaneca(caneca.type).includes(selecResiduo.type)) {
           correctCount++;
-          residuos = residuos.filter((residuo) => residuo.type !== selecResiduo.type); 
+          residuos = residuos.filter((residuo) => residuo.type !== selecResiduo.type);
         } else {
           incorrectCount++;
         }
@@ -179,13 +179,13 @@ canva.addEventListener("mouseup", (e) => {
 const getResiduoTypeForCaneca = (canecaType) => {
   switch (canecaType) {
     case "Blanca":
-      return "Aprovechables";
+      return ["Aprovechables", "Papel", "Bolsa"];
     case "Verde":
-      return "Organicos";
+      return ["Organicos", "CascaraPlatano", "CascarasHuevo"];
     case "Negra":
-      return "No Aprovechables";
+      return ["No Aprovechables"];
     default:
-      return null;
+      return [];
   }
 };
 
