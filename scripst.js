@@ -59,7 +59,7 @@ const loadImages = async () => {
 const draw = () => {
   ctx.clearRect(0, 0, canva.width, canva.height);
 
-  // Dibuja las canecas primero para que queden en el fondo
+  
   canecas.forEach((caneca) => {
     if (images[caneca.type]) {
       ctx.drawImage(images[caneca.type], caneca.x, caneca.y, caneca.width, caneca.height);
@@ -73,7 +73,6 @@ const draw = () => {
     }
   });
 
-  // Luego dibuja los residuos sobre las canecas
   residuos.forEach((residuo) => {
     if (images[residuo.type]) {
       ctx.drawImage(images[residuo.type], residuo.x, residuo.y, residuo.width, residuo.height);
