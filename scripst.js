@@ -11,6 +11,22 @@ let residuos = [
   { type: "CascarasHuevo", x: 450, y: 100, width: 75, height: 75 },
   { type: "Papel", x: 550, y: 100, width: 75, height: 75 },
   { type: "Bolsa", x: 650, y: 100, width: 75, height: 75 },
+  { type: "comida", x: 50, y: 100, width: 75, height: 75 },
+  { type: "Bolsas", x: 150, y: 100, width: 75, height: 75 },
+  { type: "envolturas", x: 350, y: 100, width: 75, height: 75 },
+  { type: "botella", x: 250, y: 100, width: 75, height: 75 },
+  { type: "vidrio", x: 350, y: 100, width: 75, height: 75 },
+  { type: "porcelana", x: 150, y: 100, width: 75, height: 75 },
+  { type: "papelRollo", x: 450, y: 100, width: 75, height: 75 },
+  { type: "botellaPlastica", x: 550, y: 100, width: 75, height: 75 },
+  { type: "restos", x: 650, y: 100, width: 75, height: 75 },
+  { type: "restosOrganicos", x: 50, y: 100, width: 75, height: 75 },
+  { type: "reciclable", x: 150, y: 100, width: 75, height: 75 },
+  { type: "ceramica", x: 250, y: 100, width: 75, height: 75 },
+  { type: "manzana", x: 450, y: 100, width: 75, height: 75 },
+  { type: "pilas", x: 550, y: 100, width: 75, height: 75 },
+  { type: "vaso", x: 650, y: 100, width: 75, height: 75 },
+  { type: "cristal", x: 50, y: 100, width: 75, height: 75 },
 ];
 
 const canecas = [
@@ -46,6 +62,28 @@ const loadImages = async () => {
       loadImage("resources/images/cascaras-huevo.png", "CascarasHuevo"),
       loadImage("resources/images/papel.webp", "Papel"),
       loadImage("resources/images/bolsa.png", "Bolsa"),
+      loadImage(
+        "resources/images/_90016177_comida_thinkstockphotos10.jpg",
+        "comida"
+      ),
+      loadImage(
+        "resources/images/2B5C2BC7-1C84-4E1D-9599-75E526F28A7B.jpeg",
+        "Bolsas"
+      ),
+      loadImage("resources/images/botella.webp", "botella"),
+      loadImage("resources/images/vidrio.jpg", "vidrio"),
+      loadImage("resources/images/elite.jpg", "papelRollo"),
+      loadImage("resources/images/botellaPlastica.jpg", "botellaPlastica"),
+      loadImage("resources/images/restos.avif", "restos"),
+      loadImage("resources/images/organicos.jpg", "restosOrganicos"),
+      loadImage("resources/images/reciclable.avif", "reciclable"),
+      loadImage("resources/images/ceramica.jpg", "ceramica"),
+      loadImage("resources/images/envolturas.png", "envolturas"),
+      loadImage("resources/images/manzana.png", "manzana"),
+      loadImage("resources/images/pilas.png", "pilas"),
+      loadImage("resources/images/vaso-plastico.jpg", "vaso"),
+      loadImage("resources/images/porcelana.png", "porcelana"),
+      loadImage("resources/images/Vidrio-cristal.webp", "cristal"),
       loadImage("resources/images/caneca-blanca.jpg", "Blanca"),
       loadImage("resources/images/caneca-negra.webp", "Negra"),
       loadImage("resources/images/caneca-verde.jpg", "Verde"),
@@ -158,7 +196,7 @@ canva.addEventListener("mouseup", (e) => {
           mouseY
         )
       ) {
-        if (getResiduoTypeForCaneca(caneca.type).includes(selecResiduo.type)) {
+        if (residuoPorCaneca(caneca.type).includes(selecResiduo.type)) {
           correctCount++;
           residuos = residuos.filter((residuo) => residuo.type !== selecResiduo.type);
         } else {
@@ -175,14 +213,40 @@ canva.addEventListener("mouseup", (e) => {
   }
 });
 
-const getResiduoTypeForCaneca = (canecaType) => {
+const residuoPorCaneca = (canecaType) => {
   switch (canecaType) {
     case "Blanca":
-      return ["Aprovechables", "Papel", "Bolsa"];
+      return [
+        "Aprovechables",
+        "Papel",
+        "Bolsa",
+        "Bolsas",
+        "botella",
+        "vidrio",
+        "papelRollo",
+        "botellaPlastica",
+        "reciclable",
+        "vaso",
+        "cristal",
+      ];
     case "Verde":
-      return ["Organicos", "CascaraPlatano", "CascarasHuevo"];
+      return [
+        "Organicos",
+        "CascaraPlatano",
+        "CascarasHuevo",
+        "restosOrganicos",
+        "restos",
+        "manzana",
+      ];
     case "Negra":
-      return ["No Aprovechables"];
+      return [
+        "No Aprovechables",
+        "comida",
+        "ceramica",
+        "envolturas",
+        "pilas",
+        "porcelana",
+      ];
     default:
       return [];
   }
