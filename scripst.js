@@ -63,7 +63,7 @@ const loadImages = async () => {
       loadImage("resources/images/papel.webp", "Papel"),
       loadImage("resources/images/bolsa.png", "Bolsa"),
       loadImage(
-        "resources/images/_90016177_comida_thinkstockphotos10.jpg",
+        "resources/images/comidaRes.jpg",
         "comida"
       ),
       loadImage(
