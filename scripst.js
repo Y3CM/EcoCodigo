@@ -11,7 +11,7 @@ let residuos = [
   { type: "CascarasHuevo", x: 450, y: 100, width: 75, height: 75 },
   { type: "Papel", x: 550, y: 100, width: 75, height: 75 },
   { type: "Bolsa", x: 650, y: 100, width: 75, height: 75 },
-  { type: "comida", x: 50, y: 100, width: 75, height: 75 },
+ // { type: "comida", x: 50, y: 100, width: 75, height: 75 },
   { type: "Bolsas", x: 150, y: 100, width: 75, height: 75 },
   { type: "envolturas", x: 350, y: 100, width: 75, height: 75 },
   { type: "botella", x: 250, y: 100, width: 75, height: 75 },
@@ -62,14 +62,8 @@ const loadImages = async () => {
       loadImage("resources/images/cascaras-huevo.png", "CascarasHuevo"),
       loadImage("resources/images/papel.webp", "Papel"),
       loadImage("resources/images/bolsa.png", "Bolsa"),
-      loadImage(
-        "resources/images/comidaRes.jpg",
-        "comida"
-      ),
-      loadImage(
-        "resources/images/2B5C2BC7-1C84-4E1D-9599-75E526F28A7B.jpeg",
-        "Bolsas"
-      ),
+      //loadImage("resources/images/comidaRes.jpg","comida"),
+      loadImage("resources/images/2B5C2BC7-1C84-4E1D-9599-75E526F28A7B.jpeg","Bolsas"),
       loadImage("resources/images/botella.webp", "botella"),
       loadImage("resources/images/vidrio.jpg", "vidrio"),
       loadImage("resources/images/elite.jpg", "papelRollo"),
