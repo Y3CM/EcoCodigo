@@ -136,3 +136,80 @@ h1{
     color: rgb(0, 0, 0);
     text-shadow: 2px 2px 5px rgb(137, 43, 226);
 }
+button, .btn, .btn-close, .link-main, img {
+    transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 12px rgba(137, 43, 226, 0.4);
+}
+
+button:active, .btn:active {
+    transform: scale(0.95);
+}
+
+.btn-close:hover {
+    transform: scale(1.1) rotate(2deg);
+    box-shadow: 0px 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+.link-main:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px orchid;
+}
+
+img {
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+    animation: fadeIn 0.8s ease;
+}
+
+img:hover {
+    transform: scale(1.08);
+    box-shadow: 0px 6px 18px rgba(137, 43, 226, 0.6);
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.container-input {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container-input:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 0px 12px 8px rgba(137, 43, 226, 0.4);
+}
+#info {
+    animation: slideDown 0.8s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#saludo {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+#mycanvas {
+    animation: fadeIn 1s ease;
+}
