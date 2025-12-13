@@ -1,19 +1,31 @@
 console.log("EcoCodigo");
  
-let login = localStorage.getItem("login");
+const login = localStorage.getItem("login");
+const user = JSON.parse(localStorage.getItem("users"));
 
-  if (login != undefined) {
-    let users = localStorage.getItem("users");
-    users = JSON.parse(users);
-    users.forEach((item) => {
-      saludo.innerHTML = `Bienvenido ${item.nombre} ${item.apellido}`;
-    });
-  } else {
-    window.location.href = "login.html";
-  }
+
+if (login && user) {
+  saludo.textContent = `Bienvenido ${user.nombre} ${user.apellido}`;
+} else {
+  window.location.href = "login.html";
+}
+
+
 
 const canva = document.getElementById("mycanvas");
 const ctx = canva.getContext("2d");
+
+const resizeCanvas = () => {
+  canva.width = window.innerWidth;
+  canva.height = window.innerHeight * 0.75;
+  
+};
+
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  draw();
+});
+
 
 let residuos = [
   { type: "Aprovechables", x: 50, y: 100, width: 75, height: 75 },
@@ -40,12 +52,38 @@ let residuos = [
   { type: "vaso", x: 650, y: 100, width: 75, height: 75 },
   { type: "cristal", x: 50, y: 100, width: 75, height: 75 },
 ];
+residuos.forEach((r, i) => {
+  r.x = 30 + (i % 6) * 90;
+  r.y = 80 + Math.floor(i / 6) * 90;
+});
 
 const canecas = [
-  { type: "Blanca", x: 100, y: 300, width: 100, height: 100, color: "gray" },
-  { type: "Verde", x: 250, y: 300, width: 100, height: 100, color: "green" },
-  { type: "Negra", x: 400, y: 300, width: 100, height: 100, color: "black" },
+  {
+    type: "Blanca",
+    width: 90,
+    height: 90,
+    color: "gray",
+    x: () => canva.width * 0.2,
+    y: () => canva.height * 0.75,
+  },
+  {
+    type: "Verde",
+    width: 90,
+    height: 90,
+    color: "green",
+    x: () => canva.width * 0.5,
+    y: () => canva.height * 0.75,
+  },
+  {
+    type: "Negra",
+    width: 90,
+    height: 90,
+    color: "black",
+    x: () => canva.width * 0.8,
+    y: () => canva.height * 0.75,
+  },
 ];
+
 
 const images = {};
 let selecResiduo = null;
@@ -103,54 +141,70 @@ const loadImages = async () => {
 const draw = () => {
   ctx.clearRect(0, 0, canva.width, canva.height);
 
-  
+  // Dibujar canecas
   canecas.forEach((caneca) => {
     if (images[caneca.type]) {
-      ctx.drawImage(images[caneca.type], caneca.x, caneca.y, caneca.width, caneca.height);
-      ctx.strokeRect(caneca.x, caneca.y, caneca.width, caneca.height);
+      ctx.drawImage(
+        images[caneca.type],
+        caneca.x(),
+        caneca.y(),
+        caneca.width,
+        caneca.height
+      );
+
+      ctx.strokeRect(caneca.x(), caneca.y(), caneca.width, caneca.height);
+
       ctx.font = "16px Arial";
       ctx.fillStyle = caneca.color;
-      const textX = caneca.x + caneca.width / 2;
-      const textY = caneca.y + caneca.height + 20;
       ctx.textAlign = "center";
-      ctx.fillText(caneca.type, textX, textY);
-    }
-  });
-
-  residuos.forEach((residuo) => {
-    if (images[residuo.type]) {
-      ctx.drawImage(images[residuo.type], residuo.x, residuo.y, residuo.width, residuo.height);
-    }
-  });
-
-  if (selecResiduo) {
-    if (images[selecResiduo.type]) {
-      ctx.drawImage(
-        images[selecResiduo.type],
-        selecResiduo.x,
-        selecResiduo.y,
-        selecResiduo.width,
-        selecResiduo.height
+      ctx.fillText(
+        caneca.type,
+        caneca.x() + caneca.width / 2,
+        caneca.y() + caneca.height + 18
       );
     }
+  });
+
+  // Dibujar residuos
+  residuos.forEach((residuo) => {
+    if (images[residuo.type]) {
+      ctx.drawImage(
+        images[residuo.type],
+        residuo.x,
+        residuo.y,
+        residuo.width,
+        residuo.height
+      );
+    }
+  });
+
+  // Dibujar residuo seleccionado
+  if (selecResiduo && images[selecResiduo.type]) {
+    ctx.drawImage(
+      images[selecResiduo.type],
+      selecResiduo.x,
+      selecResiduo.y,
+      selecResiduo.width,
+      selecResiduo.height
+    );
   }
 
-  ctx.font = "20px comic";
+  // Marcadores
+  ctx.font = "18px Arial";
   ctx.textAlign = "left";
   ctx.fillStyle = "green";
   ctx.fillText(`Aciertos: ${correctCount}`, 20, 30);
-  ctx.fillStyle = "red";
-  ctx.fillText(`Errores: ${incorrectCount}`, 20, 60);
 
+  ctx.fillStyle = "red";
+  ctx.fillText(`Errores: ${incorrectCount}`, 20, 55);
+
+  // Fin del juego
   if (residuos.length === 0) {
-    ctx.font = "30px Arial";
-    ctx.fillStyle = "blue";
-    ctx.textAlign = "center";
-    alert("¡Felicidades! Has terminado de seleccionar todos los residuos.");
-    alert(`
-      Aciertos: ${correctCount}
-      Errores: ${incorrectCount}`);
-    window.location.reload();
+    setTimeout(() => {
+      alert("¡Felicidades! Has terminado de seleccionar todos los residuos.");
+      alert(`Aciertos: ${correctCount}\nErrores: ${incorrectCount}`);
+      window.location.reload();
+    }, 300);
   }
 };
 
@@ -163,61 +217,99 @@ const isInside = (rect, x, y) => {
   );
 };
 
-canva.addEventListener("mousedown", (e) => {
-  const mouseX = e.offsetX;
-  const mouseY = e.offsetY;
+const getPointerPos = (e) => {
+  const rect = canva.getBoundingClientRect();
+
+  if (e.touches) {
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top,
+    };
+  }
+
+  return {
+    x: e.offsetX,
+    y: e.offsetY,
+  };
+};
+
+
+
+const startDrag = (e) => {
+  e.preventDefault();
+  const { x, y } = getPointerPos(e);
 
   residuos.forEach((residuo) => {
     if (
       isInside(
-        { x: residuo.x, y: residuo.y, width: residuo.width, height: residuo.height },
-        mouseX,
-        mouseY
+        {
+          x: residuo.x,
+          y: residuo.y,
+          width: residuo.width,
+          height: residuo.height,
+        },
+        x,
+        y
       )
     ) {
       selecResiduo = { ...residuo };
     }
   });
-});
+};
 
-canva.addEventListener("mousemove", (e) => {
-  if (selecResiduo) {
-    selecResiduo.x = e.offsetX - selecResiduo.width / 2;
-    selecResiduo.y = e.offsetY - selecResiduo.height / 2;
+const drag = (e) => {
+  if (!selecResiduo) return;
+  e.preventDefault();
+
+  const { x, y } = getPointerPos(e);
+  selecResiduo.x = x - selecResiduo.width / 2;
+  selecResiduo.y = y - selecResiduo.height / 2;
+  draw();
+};
+
+const endDrag = (e) => {
+  if (!selecResiduo) return;
+
+  const { x, y } = getPointerPos(e);
+  let matchedCaneca = false;
+
+  canecas.forEach((caneca) => {
+    if (
+      isInside(
+        {
+          x: caneca.x(),
+          y: caneca.y(),
+          width: caneca.width,
+          height: caneca.height,
+        },
+        x,
+        y
+      )
+    ) {
+      if (residuoPorCaneca(caneca.type).includes(selecResiduo.type)) {
+        correctCount++;
+        residuos = residuos.filter((r) => r.type !== selecResiduo.type);
+      } else {
+        incorrectCount++;
+      }
+      matchedCaneca = true;
+    }
+  });
+
+  if (matchedCaneca) {
+    selecResiduo = null;
     draw();
   }
-});
+};
 
-canva.addEventListener("mouseup", (e) => {
-  if (selecResiduo) {
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    let matchedCaneca = false;
+canva.addEventListener("mousedown", startDrag);
+canva.addEventListener("mousemove", drag);
+canva.addEventListener("mouseup", endDrag);
 
-    canecas.forEach((caneca) => {
-      if (
-        isInside(
-          { x: caneca.x, y: caneca.y, width: caneca.width, height: caneca.height },
-          mouseX,
-          mouseY
-        )
-      ) {
-        if (residuoPorCaneca(caneca.type).includes(selecResiduo.type)) {
-          correctCount++;
-          residuos = residuos.filter((residuo) => residuo.type !== selecResiduo.type);
-        } else {
-          incorrectCount++;
-        }
-        matchedCaneca = true;
-      }
-    });
+canva.addEventListener("touchstart", startDrag, { passive: false });
+canva.addEventListener("touchmove", drag, { passive: false });
+canva.addEventListener("touchend", endDrag);
 
-    if (matchedCaneca) {
-      selecResiduo = null;
-      draw();
-    }
-  }
-});
 
 const residuoPorCaneca = (canecaType) => {
   switch (canecaType) {
@@ -258,4 +350,13 @@ const residuoPorCaneca = (canecaType) => {
   }
 };
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(() => console.log("Service Worker registrado"))
+    .catch((err) => console.error("SW error", err));
+}
+
+
 loadImages();
+
