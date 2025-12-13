@@ -1,21 +1,26 @@
 
 #info {
     text-align: center;
-    font-size: 24px;
-    margin: 20px;
-    padding-top: 30px;
+    font-size: 1rem;
+    margin: 10px;
+    padding-top: 10px;
 }
+
+@media (min-width: 768px) {
+    #info {
+        font-size: 24px;
+        margin: 20px;
+        padding-top: 30px;
+    }
+}
+
 body {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: column;
     margin: 0;
     background-color: #f0f0f0;
-    flex-direction: column;
-}
-canvas {
-    border: 1px solid #000;
+    overflow: hidden;
+    touch-action: none;
 }
 .container-fluid{
     display: flex;
@@ -210,6 +215,19 @@ img:hover {
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
+
 #mycanvas {
-    animation: fadeIn 1s ease;
+    width: 100%;
+    max-width: 100vw;
+    height: auto;
+    border: 1px solid #000;
+    touch-action: none;
 }
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+canvas {
+  touch-action: none;
+}
+
